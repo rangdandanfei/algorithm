@@ -30,7 +30,8 @@ public class LongestSubStrSolution {
 
     /**
      * 思路一：
-     *
+     * 依次遍历 s 中的每次字符，若不是重复字符，加入一个列表list中，若是重复字符，则删除列表list中该重复字符以及前面的所有字符，然后再将该重复字符加入此列表list中，
+     * 在遍历的过程中统计出列表list中存储的最大字符个数，即为字符串 s 中不含重复字符的最长子串的长度。
      * @param s
      * @return
      */
@@ -60,8 +61,9 @@ public class LongestSubStrSolution {
      * 思路二：滑动窗口
      * 窗口通常是在数组/字符串中由开始和结束索引定义的一系列元素的集合，即 [i,j)（左闭，右开）
      * 而滑动窗口是可以将两个边界向某一方向“滑动”的窗口。
+     *
      * 例如：我们将 [i,j) 向右滑动1个元素，则它将变为 [i+1,j+1)（左闭，右开），
-     * 用 HashSet 将字符存储在当前窗口 [i,j)（最初j=i）中，然后我们向右滑动索引j，如果它不在 HashSet中，我们会继续滑动j，
+     * 用 HashSet 存储当前处于窗口 [i,j)（最初j=i）中的字符，然后我们向右滑动索引j，如果它不在 HashSet中，我们会继续滑动j，
      * 直到 s[j] 已经存在于 HashSet中，此时没有重复的最长子字符串将会以索引i开头。
      * @param s
      * @return
@@ -90,7 +92,14 @@ public class LongestSubStrSolution {
      * 优化的滑动窗口1：
      * 可以定义字符到索引的映射map，而不是使用集合来判断一个字符是否存在。
      * 当我们找到重复字符时，我们可以立即跳过该窗口。
-     * 如果 s[i] 在 [i,j)范围内有与 j'重复的字符，我们不需要逐渐增加i,我们可以直接跳过[i,j']范围内的所有元素，并将i变为j'+1
+     *
+     * 如果在[i, j)范围内有与s[j]重复的字符，索引为j'，即[i, ... j', ... j)，
+     * 我们不需要逐渐增加i，可以直接跳过[i, j']范围内的所有元素，并将i变为j' + 1
+     *
+     * 举例：
+     * s = "pwwkew"，当 j = 2时，窗口[0, 2)范围内有与s[2]重复的字符w，索引为1(j' = 1)，
+     * 我们可以直接跳过[0, 1]范围内的所有元素，将i变为2(j' + 1)
+     *
      * @param s
      * @return
      */
@@ -114,6 +123,7 @@ public class LongestSubStrSolution {
     /**
      * 优化的滑动窗口2：（只针对字符集比较小的情况）
      * 当我们知道该字符集比较小的时候，我们可以用一个整数数组作为直接访问表来替换Map
+     *
      * 常用的表如下所示：
      * int [26] -- 用于字母'a'-'z'或'A'-'Z'
      * int [128] -- 用于ASCII码
@@ -137,10 +147,9 @@ public class LongestSubStrSolution {
         return maxLength;
     }
 
-
-
     public static void main(String[] args) {
-
+        System.out.println(lengthOfLongestSubstring1("pwwkew"));
+        System.out.println(lengthOfLongestSubstring1("bbbb"));
+        System.out.println(lengthOfLongestSubstring1("abcabcbb"));
     }
-
 }
